@@ -1,0 +1,91 @@
+---
+title: "Exercise4_2"
+author: "Eric Tu"
+date: "9/19/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("xlsx")
+library(knitr)
+```
+
+## Loading Data
+
+
+```{r}
+data <- read.xlsx("TrainExer42.xls", 1)
+head(data)
+```
+
+## Part a
+
+First consider the case where the event only directly affects price $(\alpha = 0)$. Estimate and report the price
+coefficients under all 4 scenarios for $\beta$ and calculate the $R^{2}$
+for all these regressions. Do the estimated price
+coefficients signal any endogeneity problem for these values of $\alpha$ and $\beta$? Can you also explain the pattern you
+find for the $R^{2}$?
+
+For $\beta = 0$:
+```{r}
+fit <- lm(SALES0_0~PRICE0, data=data)
+summary(fit)
+```
+
+```{r, echo=FALSE}
+plot(data$PRICE0, data$SALES0_0, xlab='Price', ylab='Sales', main='beta=0')
+abline(fit)
+```
+
+```{r, echo=FALSE}
+kable(summary(fit)$coef)
+```
+
+For $\beta = 1$:
+```{r}
+fit <- lm(SALES0_1~PRICE1, data=data)
+summary(fit)
+```
+
+```{r, echo=FALSE}
+plot(data$PRICE1, data$SALES0_1, xlab='Price', ylab='Sales', main='beta=1')
+abline(fit)
+```
+
+```{r, echo=FALSE}
+kable(summary(fit)$coef)
+```
+
+For $\beta = 5$:
+```{r}
+fit <- lm(SALES0_5~PRICE5, data=data)
+summary(fit)
+```
+
+```{r, echo=FALSE}
+plot(data$PRICE5, data$SALES0_5, xlab='Price', ylab='Sales', main='beta=5')
+abline(fit)
+```
+
+```{r, echo=FALSE}
+kable(summary(fit)$coef)
+```
+
+For $\beta = 10$:
+```{r}
+fit <- lm(SALES0_10~PRICE10, data=data)
+summary(fit)
+```
+
+```{r, echo=FALSE}
+plot(data$PRICE10, data$SALES0_10, xlab='Price', ylab='Sales', main='beta=10')
+abline(fit)
+```
+
+```{r, echo=FALSE}
+kable(summary(fit)$coef)
+```
+
+## Part B
+

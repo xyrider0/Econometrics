@@ -1,0 +1,67 @@
+\documentclass{article}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\begin{document}
+
+
+\begin{center}
+Econometrics Assignment e \\
+Eric Tu
+\end{center}
+
+\begin{enumerate}[label=(\alph*)]
+	\item
+	$y = \mathbf{X} \beta + \epsilon $ \\
+	Full model (unrestricted): $p_{1}$  regressors\\
+	Restricted model: $p_{0} < p_{1}$ regressors\\	
+	$AIC =\log{s^{2}} + \frac{2k}{n}$\\
+	
+	\begin{center}
+	If smallest model is preferred \\[6pt]
+	$\log{s_{0}^{2}} + \frac{2p_{0}}{n} < \log{s_{1}^{2}} + \frac{2p_{1}}{n} $\\[6pt]
+
+	$\log{s_{0}^{2}} - \log{s_{1}^{2}} < \frac{2}{n}(p_{1} - p_{0}) $\\[6pt]
+
+	$\log{\frac{s_{0}^{2}}{s_{1}^{2}}} < \frac{2}{n}(p_{1} - p_{0}) $\\[6pt]
+
+	$\frac{s_{0}^{2}}{s_{1}^{2}} < e^{\frac{2}{n}(p_{1} - p_{0})} $\\[6pt]
+	\end{center}
+	
+	\item Using $e^{x} \approx 1+x$ for small values of $x$ \\
+	\begin{center}
+	For very large n, $\frac{2}{n}$ becomes very small \\
+	$\frac{s_{0}^{2}}{s_{1}^{2}} < e^{\frac{2}{n}(p_{1} - p_{0})} $\\[6pt]
+	$\frac{s_{0}^{2}}{s_{1}^{2}} < 1 + \frac{2}{n}(p_{1} - p_{0}) $\\[6pt]
+	$\frac{s_{0}^{2}}{s_{1}^{2}} -1 < \frac{2}{n}(p_{1} - p_{0}) $\\[6pt]
+	$\frac{s_{0}^{2} - s_{1}^{2}}{s_{1}^{2}} < \frac{2}{n}(p_{1} - p_{0}) $\\[6pt]
+	\end{center}
+	
+	\item At large n, $s_{i} \approx e_{i}’e_{i}$
+	
+	\begin{center}
+	$\frac{s_{0}^{2} - s_{1}^{2}}{s_{1}^{2}} < \frac{2}{n}(p_{1} - p_{0}) $\\[6pt]
+	$\frac{e_{R}’e_{R} - e_{U}’e_{U}}{e_{U}’e_{U}} < \frac{2}{n}(p_{1} - p_{0}) $\\[6pt]
+	\end{center}
+	
+	\item At large n, using $\frac{e_{R}’e_{R} - e_{U}’e_{U}}{e_{U}’e_{U}} < \frac{2}{n}(p_{1} - p_{0}) $\\[6pt]
+	
+	\begin{center}
+	$F = \frac{e_{R}’e_{R} - e_{U}’e_{U}/(p_{1} - p_{0})}{e_{U}’e_{U}/(n-p_{1})}$ \\ [6pt]
+	$F = \frac{n-p_{1}}{p_{1}-p_{0}}\frac{2}{n}(p_{1}-p_{0})$ \\[6pt]
+	$F = \frac{2(n-p_{1})}{n}$ \\
+	\smallbreak
+	Since n is large, $n-p_{1} \approx n$ \\[6pt]
+	$F \approx \frac{2n}{n}$ \\[6pt]
+	$F \approx 2$ \\
+	\end{center}
+	
+
+
+\end{enumerate}
+
+\end{document}

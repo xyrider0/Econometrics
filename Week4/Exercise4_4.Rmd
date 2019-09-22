@@ -1,0 +1,44 @@
+---
+title: "Exercise4_4"
+author: "Eric Tu"
+date: "9/20/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("xlsx")
+library("matlib")
+```
+
+## Data Loading
+Let's load in the data first
+```{r data}
+data <- read.xlsx("TrainExer44.xls", 1)
+head(data)
+```
+
+## Regress PG on Instruments, Part 1 of 2SLS
+We are going to use a constant, RI, RPT, RPN, and RPU as instruments
+Regress PG against the instrument
+```{r instrument}
+fit_instr <- lm(PG~RI + RPT + RPN + RPU, data=data)
+val <- fit_instr$fitted.values
+summary(fit_instr)
+```
+
+## Regress GC on Fitted X Values, Part 2 of 2SLS
+With the exogenous fitted values
+```{r 2sls}
+fit <- lm(data$GC~val + data$RI)
+summary(fit)
+```
+
+## Sargan test
+Determine correlation between instruments and error
+```{r Sargan}
+fit_sargan <- lm(fit$residuals~data$RI + data$RPT + data$RPN + data$RPU)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

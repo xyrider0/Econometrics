@@ -1,0 +1,43 @@
+\documentclass{article}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\begin{document}
+
+
+\begin{center}
+Econometrics Assignment 4 \\
+Eric Tu
+\end{center}
+
+\begin{enumerate}[label=(\alph*)]
+	\item
+	$y_{i1} - y_{i0} = \alpha + \beta d_{i} + \gamma y_{i0} + x’_{i}\delta + \epsilon_{i}$ \\
+	
+	$d_{i}$ represents the answer to the survey question, “Did you follow this diet in the past year.” This variable may be endogenous as previously healthy individuals may find it easier to follow the diet but experience less weight loss due to their already healthy lifestyle. This would lead to OLS underestimating the true effect of the diet. There are probably additional factors that can lead to overestimation or underestimation of the OLS estimator making it difficult to state with conviction that the OLS will overestimate or understimate the true effect of the diet.
+
+	\item 
+	The first condition, $\frac{1}{n}\mathbf{Z}’\epsilon \rightarrow 0$ as $n$ grows large can be interpreted as the average effect of living in a region with or without door-to-door advertisement of the diet having no effect on the error in measuring the effect of the diet (no direct effect on effectiveness of the diet). \\
+	\smallskip
+	The next condition, $\frac{1}{n}\mathbf{Z}’\mathbf{X} \rightarrow \mathbf{Q} \neq 0$ as $n$ grows large can be interpreted as the average effect of living in a region with or without door-to-door advertisement of the diet does effect whether an individual follows the diet or not.
+	
+	\item
+	The first condition, $\frac{1}{n}\mathbf{Z}’\epsilon \rightarrow 0$ as $n$ grows large is tested using the Sargan test. The test is performed by comparing the $nR^{2}$ value against the significant value of the $\chi^{2}(m-k)$ distribution, where $R^{2}$ is the r-squared measurement of the $e_{2SLS}$ regression on $Z$, $n$ is the number of observaions, $m$ is the number of instruments in $Z$, and $k$ is the number of explanatory variables in $X$. Since $m=1$ (One z instrument: door-to-door advertising) and $k=1$ ($\beta$ transforms $d_{i}$: whether the diet was followed), the chi square distribution cannot be evaluated with 0 degrees of freedom, and the first condition cannot be evaluated.
+	
+	The second condiion, $\frac{1}{n}\mathbf{Z}’\mathbf{X} \rightarrow \mathbf{Q} \neq 0$ as $n$ grows large can be tested simply by regressing the potentially endogenous variables against the instruments and exogenous variables in the regression $X_{1} = Z^{*}\gamma_{1} + X_{2}\gamma_{2} + \eta$ and testing the null hypothesis $H_{0}: \gamma_{1} = 0$.
+	
+	\item
+	$\beta=(Z’X)^{-1}Z’y$ \\ [4pt]
+	$\beta=(\frac{1}{\sum_{i=1}^{n}z_{i}}Z’X)^{-1}\frac{1}{\sum_{i=1}^{n}z_{i}}Z’y$ \\ [4pt]
+	$\frac{1}{\sum_{i=1}^{n}z_{i}}Z’X = \frac{1}{\sum_{i=1}^{n}z_{i}}\sum^{n}_{i=1}z_{i}d_{i} = \bar{d}^{1}$ \\ [4pt]
+	$\frac{1}{\sum_{i=1}^{n}z_{i}}Z’y = \frac{1}{\sum_{i=1}^{n}z_{i}}\sum^{n}_{i=1}z_{i}(y_{i1}-y_{i0}) = \Delta^{1}$ \\[4pt]
+	$\beta = (\bar{d}^{1})^{-1}\Delta^{1}$ \\ [4pt]
+	$\beta = \frac{\Delta^{1}}{\bar{d}^{1}}$ \\ [4pt]
+	
+\end{enumerate}
+
+\end{document}
