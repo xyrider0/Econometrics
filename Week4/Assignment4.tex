@@ -32,12 +32,68 @@ Eric Tu
 	
 	\item
 	$\beta=(Z’X)^{-1}Z’y$ \\ [4pt]
-	$\beta=(\frac{1}{\sum_{i=1}^{n}z_{i}}Z’X)^{-1}\frac{1}{\sum_{i=1}^{n}z_{i}}Z’y$ \\ [4pt]
-	$\frac{1}{\sum_{i=1}^{n}z_{i}}Z’X = \frac{1}{\sum_{i=1}^{n}z_{i}}\sum^{n}_{i=1}z_{i}d_{i} = \bar{d}^{1}$ \\ [4pt]
-	$\frac{1}{\sum_{i=1}^{n}z_{i}}Z’y = \frac{1}{\sum_{i=1}^{n}z_{i}}\sum^{n}_{i=1}z_{i}(y_{i1}-y_{i0}) = \Delta^{1}$ \\[4pt]
-	$\beta = (\bar{d}^{1})^{-1}\Delta^{1}$ \\ [4pt]
-	$\beta = \frac{\Delta^{1}}{\bar{d}^{1}}$ \\ [4pt]
+	$Z = 
+	\begin{bmatrix}
+	1 & z_{1} \\
+	1 & z_{2} \\
+	... & ... \\
+	1 & z_{n} \\
+	\end{bmatrix}
+	X = 
+	\begin{bmatrix}
+	1 & d_{1} \\
+	1 & d_{2} \\
+	... & ... \\
+	1 & d_{n} \\
+	\end{bmatrix}$
 	
+	$Z’X = 
+	\begin{bmatrix}
+	n & \sum_{i=1}^{n} d_{i} \\
+	\sum_{i=1}^{n} z_{i} & \sum_{i=1}^{n} d_{i}z_{i} \\
+	\end{bmatrix}
+	Z’y = 
+	\begin{bmatrix}
+	\sum_{i=1}^{n} y_{i} \\
+	\sum_{i=1}^{n} y_{i} z_{i} \\
+	\end{bmatrix}$
+
+	$\beta= \frac{1}{n \sum_{i=1}^{n} d_{i}z_{i} - \sum_{i=1}^{n} d_{i}\sum_{i=1}^{n} z_{i}}
+	\begin{bmatrix}
+	\sum_{i=1}^{n} d_{i}z_{i} & -\sum_{i=1}^{n} d_{i} \\
+	-\sum_{i=1}^{n} z_{i} & n \\
+	\end{bmatrix}
+	\begin{bmatrix}
+	\sum_{i=1}^{n} y_{i} \\
+	\sum_{i=1}^{n} y_{i} z_{i} \\
+	\end{bmatrix}
+	$
+	
+	$\beta= \frac{1}{n \sum_{i=1}^{n} d_{i}z_{i} - \sum_{i=1}^{n} d_{i}\sum_{i=1}^{n} z_{i}}
+	\begin{bmatrix}
+	\sum_{i=1}^{n} d_{i}z_{i}\sum_{i=1}^{n} y_{i}  -\sum_{i=1}^{n} d_{i} \sum_{i=1}^{n} y_{i} z_{i}\\
+	-\sum_{i=1}^{n} z_{i}\sum_{i=1}^{n} y_{i} + n \sum_{i=1}^{n} y_{i} z_{i}\\
+	\end{bmatrix}
+	\\
+	=
+	\frac{1}{n \sum_{i=1}^{n} d_{i}z_{i} - \sum_{i=1}^{n} d_{i}\sum_{i=1}^{n} z_{i}}
+	\begin{bmatrix}
+	0\\
+	n \sum_{i=1}^{n} y_{i} z_{i}-\sum_{i=1}^{n} z_{i}\sum_{i=1}^{n} y_{i} \\
+	\end{bmatrix}
+	$
+	
+	$= \frac{n \sum_{i=1}^{n} y_{i} z_{i}-\sum_{i=1}^{n} z_{i}\sum_{i=1}^{n} y_{i}}
+	{n \sum_{i=1}^{n} d_{i}z_{i} - \sum_{i=1}^{n} d_{i}\sum_{i=1}^{n} z_{i}}$ \\
+	
+	$= \frac{\sum_{i=1}^{n} y_{i} z_{i}- \frac{1}{n}\sum_{i=1}^{n} z_{i}\sum_{i=1}^{n} y_{i}}
+	{\sum_{i=1}^{n} d_{i}z_{i} - \frac{1}{n}\sum_{i=1}^{n} d_{i}\sum_{i=1}^{n} z_{i}}$
+	
+	$= \frac{\frac{1}{\sum_{i=1}^{n} z_{i}}\sum_{i=1}^{n} y_{i} z_{i}- \frac{1}{n}\sum_{i=1}^{n} y_{i}}
+	{\frac{1}{{\sum_{i=1}^{n} z_{i}}}\sum_{i=1}^{n} d_{i}z_{i} - \frac{1}{n}\sum_{i=1}^{n} d_{i}}$
+	
+	$= \frac{\Delta^{1} - \Delta}{\bar{d}^{1} - \bar{d}}$
+
 \end{enumerate}
 
 \end{document}
