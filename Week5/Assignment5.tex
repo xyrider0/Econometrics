@@ -14,7 +14,7 @@ Econometrics Assignment 5 \\
 Eric Tu
 \end{center}
 
-	$Pr[resp_{i} = 1] = \frac{exp(\beta_{0} + \beta_{1} male_{i} + \beta_{2} active_{i} + \beta_{3} age_{i} + \beta_{4}(age_{i}/10)^{2})}{1+exp(\beta_{0} + \beta_{1} male_{i} + \beta_{2} active_{i} + \beta_{3} age_{i} + \beta_{4}(age_{i}/10)^{2})}$ \\[8pt]
+	$Pr[resp_{i} = 1] = \cfrac{exp(\beta_{0} + \beta_{1} male_{i} + \beta_{2} active_{i} + \beta_{3} age_{i} + \beta_{4}(age_{i}/10)^{2})}{1+exp(\beta_{0} + \beta_{1} male_{i} + \beta_{2} active_{i} + \beta_{3} age_{i} + \beta_{4}(age_{i}/10)^{2})}$ 
 
 	$\begin{matrix}
 	Variable & Coefficient \\
@@ -27,26 +27,47 @@ Eric Tu
 
 \begin{enumerate}[label=(\alph*)]
 
-
-
 	\item{}
 	For a 50 year old active male customer
-	
+	\begin{center}
 	$Pr[resp_{i} = 0]active_{i} \beta_{2}$ \\ [4pt]
 	$ (1 - Pr[resp_{i} =1])active_{i} \beta_{2}$ \\ [4pt]
-	$ \frac{1}{1+exp(-2.488 + 0.954 + 0.914 + 0.070 * 50 -0.069 * 25)} (0.914) $ \\[4pt]
-	$ 0.229 $ \\ [8pt]
+	$ \cfrac{1}{1+exp(-2.488 + 0.954 + 0.914 + 0.070 * 50 -0.069 * 25)} (0.914 * 1) $ \\[4pt]
+	$ = 0.229 $ \\ [4pt]
+	\end{center}
 	
 	For a 50 year old inactive male customer \\
-	$\frac{1}{1+exp(-2.488 + 0.954 + 0.070 * 50 -0.069 * 25)} 0 = 0$
+	\begin{center}
+	$\cfrac{1}{1+exp(-2.488 + 0.954 + 0.070 * 50 -0.069 * 25)} (0.914 * 0) $ \\
+	$= 0$ \\
+	\end{center}
 	
 	\item
-	$\frac{Pr[resp_{i}=1|active_{i}=1] - Pr[resp_{i}=1|active_{i}=0]}{Pr[resp_{i}=1|active_{i}=0]}	$
+	Let $Z =  exp(\beta_{0} + \beta_{1} male_{i} + \beta_{3} age_{i} + \beta_{4}(age_{i}/10)^{2}) $\\ [6pt]
+	then $exp(\beta_{2})Z = exp(\beta_{0} + \beta_{1} male_{i} + \beta_{2} + \beta_{3} age_{i} + \beta_{4}(age_{i}/10)^{2})$ \\ [6pt]
+	
+	\begin{center}
+	$\cfrac{Pr[resp_{i}=1|active_{i}=1] - Pr[resp_{i}=1|active_{i}=0]}{Pr[resp_{i}=1|active_{i}=0]}	$ \\ [6pt]
+	$\cfrac{\cfrac{exp(\beta_{2})Z}{1 + Zexp(\beta_{2})} - \cfrac{Z}{1+Z}}{\cfrac{Z}{1+Z}}$ \\	[6pt]
+	$(\cfrac{1+Z}{Z})\cfrac{exp(\beta_{2})Z}{1 + Zexp(\beta_{2})} - (\cfrac{1+Z}{Z})\cfrac{Z}{1+Z}$ \\ [6pt]
+	$ \cfrac{(1+Z)exp(\beta_{2})}{1 + Zexp(\beta_{2})} - 1$ \\ [6pt]
+	$ \cfrac{Zexp(\beta_{2}) + exp(\beta_{2}) - 1 - Zexp(\beta_{2})}{1 + Zexp(\beta_{2})}$ \\ [6pt]
+	$ \cfrac{exp(\beta_{2}) - 1}{1 + Zexp(\beta_{2})}$ \\ [6pt]
+	$ (exp(\beta_{2}) - 1)\cfrac{1}{1 + Zexp(\beta_{2})}$ \\ [6pt]
+	\end{center}
+	\textit{Using $Pr[resp_{i}=0|active_{i}=1] = 1 - Pr[resp_{i}=1|active_{i}] = \cfrac{1}{1 + Zexp(\beta_{2})}$} \\ [6pt]
+	\begin{center}
+	$ (exp(\beta_{2}) - 1)Pr[resp_{i}=0|active_{i}=1] $ \\	[6pt]
+	\end{center}
+
+		
 	
 	\item
-	$exp(\beta_{2}) - 1) Pr[ resp_{i} =0 | active_{i} =1]$ \\[4pt]
-	$(exp(0.914) -1) \frac{1}{1+exp(-2.488 + 0.954 + 0.914 + 0.070 * 50 -0.069 * 25)}$ \\[4pt]
-	$ 0.219$ \\ [8pt]
+	$(exp(\beta_{2}) - 1) Pr[ resp_{i} =0 | active_{i} =1]$ \\[4pt]
+	\begin{center}
+	$(exp(0.914) -1) \cfrac{1}{1+exp(-2.488 + 0.954 + 0.914 + 0.070 * 50 -0.069 * 25)}$ \\[4pt]
+	$ = 0.365$ \\ [8pt]
+	\end{center}
 \end{enumerate}
 
 \end{document}
