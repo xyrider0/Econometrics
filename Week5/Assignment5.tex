@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\begin{document}
+
+
+\begin{center}
+Econometrics Assignment 5 \\
+Eric Tu
+\end{center}
+
+	$Pr[resp_{i} = 1] = \frac{exp(\beta_{0} + \beta_{1} male_{i} + \beta_{2} active_{i} + \beta_{3} age_{i} + \beta_{4}(age_{i}/10)^{2})}{1+exp(\beta_{0} + \beta_{1} male_{i} + \beta_{2} active_{i} + \beta_{3} age_{i} + \beta_{4}(age_{i}/10)^{2})}$ \\[8pt]
+
+	$\begin{matrix}
+	Variable & Coefficient \\
+	Intercept & -2.488 \\
+	Male & 0.954 \\
+	Active & 0.914 \\
+	Age & 0.070 \\
+	(Age/10)^{2} & -0.069 \\
+	\end{matrix}$
+
+\begin{enumerate}[label=(\alph*)]
+
+
+
+	\item{}
+	For a 50 year old active male customer
+	
+	$Pr[resp_{i} = 0]active_{i} \beta_{2}$ \\ [4pt]
+	$ (1 - Pr[resp_{i} =1])active_{i} \beta_{2}$ \\ [4pt]
+	$ \frac{1}{1+exp(-2.488 + 0.954 + 0.914 + 0.070 * 50 -0.069 * 25)} (0.914) $ \\[4pt]
+	$ 0.229 $ \\ [8pt]
+	
+	For a 50 year old inactive male customer \\
+	$\frac{1}{1+exp(-2.488 + 0.954 + 0.070 * 50 -0.069 * 25)} 0 = 0$
+	
+	\item
+	$\frac{Pr[resp_{i}=1|active_{i}=1] - Pr[resp_{i}=1|active_{i}=0]}{Pr[resp_{i}=1|active_{i}=0]}	$
+	
+	\item
+	$exp(\beta_{2}) - 1) Pr[ resp_{i} =0 | active_{i} =1]$ \\[4pt]
+	$(exp(0.914) -1) \frac{1}{1+exp(-2.488 + 0.954 + 0.914 + 0.070 * 50 -0.069 * 25)}$ \\[4pt]
+	$ 0.219$ \\ [8pt]
+\end{enumerate}
+
+\end{document}
