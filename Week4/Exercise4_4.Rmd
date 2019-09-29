@@ -38,7 +38,8 @@ summary(fit)
 Determine correlation between instruments and error
 ```{r Sargan}
 fit_sargan <- lm(fit$residuals~data$RI + data$RPT + data$RPN + data$RPU)
-
+nr2 <- nrow(data) * summary(fit_sargan)$r.squared
+chisq.test(nr2)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
