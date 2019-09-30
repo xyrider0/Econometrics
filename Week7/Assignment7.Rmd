@@ -2,29 +2,70 @@
 title: "Assignment 7"
 author: "Eric Tu"
 date: "9/29/2019"
-output: pdf_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library("xlsx")
 ```
 
-## R Markdown
+## Load GPD Data
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r data}
+data <- read.xlsx("Case_GDP.xls", 1)
+head(data)
 ```
 
-## Including Plots
+## Part a
 
-You can also embed plots, for example:
+### Likelihood Ratio tests
+$b_{0}$ is parameters with restriction
+$b_{1}$ is parameters w/o restriction
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+Chi-square distribution
+LR = $ -2 (\log L(b_{0}) - \log L(b_{1}))$
+
+```{r Likelihood}
+# Storing given log likelihood values
+## Restricted Models
+ll_b0_c <- -152.763
+ll_b0_c_li1 <- -139.747
+ll_b0_c_li2 <- -149.521
+
+## Unrestriced model
+ll_b1 <- -134.178
+
+# Storing number of restrictions
+m_b0_c <- 2
+m_b0_c_li1 <- 1
+m_b0_c_li2 <- 1
+
+# Test log likelihood ratio
+llr <- function(ll0, ll1){
+  -2 * (ll0 - ll1)
+}
+
+llr_b0_c <- llr(ll_b0_c, ll_b1)
+llr_b0_c_li1 <- llr(ll_b0_c_li1, ll_b1)
+llr_b0_c_li2 <- llr(ll_b0_c_li2, ll_b1)
+
+# Critical values chi-square
+prob <- 0.95
+crit_b0_c <- qchisq(prob, df = m_b0_c)
+crit_b0_c_li1 <- qchisq(prob, df=m_b0_c_li1)
+crit_b0_c_li2 <- qchisq(prob, df = m_b0_c_li2)
+
+# Significant Bool
+sig_b0_c <- (llr_b0_c > crit_b0_c)
+sig_b0_c_li1 <- (llr_b0_c_li1 > crit_b0_c_li1)
+sig_b0_c_li2 <- (llr_b0_c_li2 > crit_b0_c_li2)
+
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+For Joint Li1, Li2. Log Likelihood ratio: `r llr_b0_c` Crit Val: `r crit_b0_c` Significant: `r sig_b0_c`
+
+For Li1. Log Likelihood ratio: `r llr_b0_c_li1` Crit Val: `r crit_b0_c_li1` Significant: `r sig_b0_c_li1` 
+
+For Li2. Log Likelihood ratio: `r llr_b0_c_li2` Crit Val: `r crit_b0_c_li2` Significant: `r sig_b0_c_li2` 

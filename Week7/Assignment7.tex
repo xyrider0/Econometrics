@@ -1,0 +1,208 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Assignment 7},
+            pdfauthor={Eric Tu},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Assignment 7}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Eric Tu}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{9/29/2019}
+
+
+\begin{document}
+\maketitle
+
+\hypertarget{load-gpd-data}{%
+\subsection{Load GPD Data}\label{load-gpd-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data <-}\StringTok{ }\KeywordTok{read.xlsx}\NormalTok{(}\StringTok{"Case_GDP.xls"}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\KeywordTok{head}\NormalTok{(data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Date     GDP GDPIMPR   LOGGDP            GrowthRate li1 li2 T
+## 1 1950Q1  94.300      NA 4.546481                    NA   0   0 0
+## 2 1950Q2  95.200       1 4.555980   0.00949875215790819   0   0 1
+## 3 1950Q3  97.663       1 4.581523     0.025542835184778   3   1 2
+## 4 1950Q4  99.728       1 4.602446    0.0209237030843967   4   2 3
+## 5 1951Q1 100.445       1 4.609610   0.00716383394761788   2   1 4
+## 6 1951Q2 100.406       0 4.609222 -0.000388347585922766   1   3 5
+\end{verbatim}
+
+\hypertarget{part-a}{%
+\subsection{Part a}\label{part-a}}
+
+\hypertarget{likelihood-ratio-tests}{%
+\subsubsection{Likelihood Ratio tests}\label{likelihood-ratio-tests}}
+
+\(b_{0}\) is parameters with restriction \(b_{1}\) is parameters w/o
+restriction
+
+Chi-square distribution LR = \$ -2 (\log L(b\_\{0\}) -
+\log L(b\_\{1\}))\$
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Storing given log likelihood values}
+\CommentTok{## Restricted Models}
+\NormalTok{ll_b0_c <-}\StringTok{ }\FloatTok{-152.763}
+\NormalTok{ll_b0_c_li1 <-}\StringTok{ }\FloatTok{-139.747}
+\NormalTok{ll_b0_c_li2 <-}\StringTok{ }\FloatTok{-149.521}
+
+\CommentTok{## Unrestriced model}
+\NormalTok{ll_b1 <-}\StringTok{ }\FloatTok{-134.178}
+
+\CommentTok{# Storing number of restrictions}
+\NormalTok{m_b0_c <-}\StringTok{ }\DecValTok{2}
+\NormalTok{m_b0_c_li1 <-}\StringTok{ }\DecValTok{1}
+\NormalTok{m_b0_c_li2 <-}\StringTok{ }\DecValTok{1}
+
+\CommentTok{# Test log likelihood ratio}
+\NormalTok{llr <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ll0, ll1)\{}
+  \DecValTok{-2} \OperatorTok{*}\StringTok{ }\NormalTok{(ll0 }\OperatorTok{-}\StringTok{ }\NormalTok{ll1)}
+\NormalTok{\}}
+
+\NormalTok{llr_b0_c <-}\StringTok{ }\KeywordTok{llr}\NormalTok{(ll_b0_c, ll_b1)}
+\NormalTok{llr_b0_c_li1 <-}\StringTok{ }\KeywordTok{llr}\NormalTok{(ll_b0_c_li1, ll_b1)}
+\NormalTok{llr_b0_c_li2 <-}\StringTok{ }\KeywordTok{llr}\NormalTok{(ll_b0_c_li2, ll_b1)}
+
+\CommentTok{# Critical values chi-square}
+\NormalTok{prob <-}\StringTok{ }\FloatTok{0.95}
+\NormalTok{crit_b0_c <-}\StringTok{ }\KeywordTok{qchisq}\NormalTok{(prob, }\DataTypeTok{df =}\NormalTok{ m_b0_c)}
+\NormalTok{crit_b0_c_li1 <-}\StringTok{ }\KeywordTok{qchisq}\NormalTok{(prob, }\DataTypeTok{df=}\NormalTok{m_b0_c_li1)}
+\NormalTok{crit_b0_c_li2 <-}\StringTok{ }\KeywordTok{qchisq}\NormalTok{(prob, }\DataTypeTok{df =}\NormalTok{ m_b0_c_li2)}
+
+\CommentTok{# Significant Bool}
+\NormalTok{sig_b0_c <-}\StringTok{ }\NormalTok{(llr_b0_c }\OperatorTok{>}\StringTok{ }\NormalTok{crit_b0_c)}
+\NormalTok{sig_b0_c_li1 <-}\StringTok{ }\NormalTok{(llr_b0_c_li1 }\OperatorTok{>}\StringTok{ }\NormalTok{crit_b0_c_li1)}
+\NormalTok{sig_b0_c_li2 <-}\StringTok{ }\NormalTok{(llr_b0_c_li2 }\OperatorTok{>}\StringTok{ }\NormalTok{crit_b0_c_li2)}
+\end{Highlighting}
+\end{Shaded}
+
+For Joint Li1, Li2. Log Likelihood ratio: 37.17 Significant: TRUE
+
+For Li1. Log Likelihood ratio: 11.138 Significant: TRUE
+
+For Li2. Log Likelihood ratio: 30.686 Significant: TRUE
+
+
+\end{document}
