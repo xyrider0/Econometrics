@@ -2,12 +2,15 @@
 title: "Assignment 7"
 author: "Eric Tu"
 date: "9/29/2019"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library("xlsx")
+library("lmtest")
 ```
 
 ## Load GPD Data
@@ -68,4 +71,183 @@ For Joint Li1, Li2. Log Likelihood ratio: `r llr_b0_c` Crit Val: `r crit_b0_c` S
 
 For Li1. Log Likelihood ratio: `r llr_b0_c_li1` Crit Val: `r crit_b0_c_li1` Significant: `r sig_b0_c_li1` 
 
-For Li2. Log Likelihood ratio: `r llr_b0_c_li2` Crit Val: `r crit_b0_c_li2` Significant: `r sig_b0_c_li2` 
+For Li2. Log Likelihood ratio: `r llr_b0_c_li2` Crit Val: `r crit_b0_c_li2` Significant: `r sig_b0_c_li2`
+
+
+## Part b
+We can use McFadden $R^{2}$ to select the best lag structure because all the log likelihood ratios are significant. The McFadden $R^{2}$ calculation is given by $R^{2} = 1 - \cfrac{\log{L(b)}}{\log{L(b_{1})}}$ where $b_{1}$ is the model with only an intercept. The largest Mcfadden $R^{2}$ value should be chosen as the preferred logit model.
+
+```{r Mcfadden}
+calcMcfadden <- function(ll_test, ll_const){
+  1 - ll_test/ll_const
+}
+
+ll_logit1 <- -134.178
+ll_logit2 <- -134.126
+ll_logit3 <- -130.346
+ll_logit4 <- -130.461
+ll_const <- -152.763
+
+mc_r2_logit1 <- calcMcfadden(ll_logit1, ll_const)
+mc_r2_logit2 <- calcMcfadden(ll_logit2, ll_const)
+mc_r2_logit3 <- calcMcfadden(ll_logit3, ll_const)
+mc_r2_logit4 <- calcMcfadden(ll_logit4, ll_const)
+```
+
+The Mcfadden $R^{2}$ values are:
+
+* Logit 1 [li1(-1), li2(-1)]: `r mc_r2_logit1`
+* Logit 2 [li1(-1), li2(-2)]: `r mc_r2_logit2`
+* Logit 3 [li1(-2), li2(-1)]: `r mc_r2_logit3`
+* Logit 4 [li1(-2), li2(-2)]: `r mc_r2_logit4`
+
+The best model is Logit 3 [li1(-2), li2(-1): with the highest McFadden $R^{2}$ value of `r mc_r2_logit3`
+
+## Part c
+
+Logit Model 3:
+$\beta_{c} = 0.746$
+$\beta_{li1(-2)} = -0.429$
+$\beta_{li2(-1)} = -0.131$
+
+Pr[$y_{i} = 1$] = $\cfrac{exp(x_{i}'b)}{1 + exp(x_{i}'b)}$
+Pr[$y_{i} = 0$] = $\cfrac{1}{1 + exp(x_{i}'b)}$
+
+```{r LogitEval} 
+beta_c <- 0.746
+beta_1 <- -0.429
+beta_2 <- -0.131
+cutoff <- 0.5
+range <- 245:264
+x_1 <- data$li1[range]
+x_2 <- data$li2[range]
+
+Z <- exp(beta_c + beta_1 * x_1 + beta_2 * x_2)
+logit_vals <- Z/(1 + Z) 
+  
+predic_num = as.integer(logit_vals > cutoff)
+
+logit_eval <- data$GDPIMPR[range]
+logit_num <- as.numeric(levels(logit_eval))[logit_eval]
+
+t0_p0 <- sum((predic_num == 0 & logit_num == 0))/ length(range)
+t0_p1 <- sum((predic_num == 1 & logit_num == 0))/ length(range)
+t1_p0 <- sum((predic_num == 0 & logit_num == 1))/ length(range)
+t1_p1 <- sum((predic_num == 1 & logit_num == 1))/ length(range)
+```
+
+<center>Cut-off value: 0.5</center>
+
+observed | $\hat{y} = 0$  | $\hat{y} = 1$  | sum
+-------- | -------------  | -------------  | ---
+$y = 0$  | `r t0_p0`      | `r t0_p1`      | `r t0_p0+t0_p1`
+$y = 1$  | `r t1_p0`      | `r t1_p1`      | `r t1_p0+t1_p1`
+sum      | `r t0_p0+t1_p0`|`r t0_p1+t1_p1` | `r t0_p0+t1_p0+t0_p1 +t1_p1`
+-----------------------------------------------
+<center>Hit rate: `r t0_p0` + `r t1_p1` = `r t0_p0 + t1_p1` </center>
+
+## Part d
+Augmented Dicky-Fuller test on LOG GDP.
+Includes constant, trend, and single lag.
+
+```{r Dicky-Fuller}
+est_range <- 4:242
+log_gdp <- data$LOGGDP[est_range]
+log_gdp_lag1 <- data$LOGGDP[est_range-1]
+log_gdp_diff1 <- diff(data$LOGGDP)[est_range]
+trend <- data$T[est_range]
+
+df_fit <- lm(log_gdp~log_gdp_lag1+log_gdp_diff1+trend)
+
+
+crit_val_trend <- -3.5
+
+ro_coef <- summary(df_fit)$coef[3,1]
+ro_tval <- summary(df_fit)$coef[3, 3]
+
+reject_non_stationarity <- ro_tval < crit_val_trend
+```
+
+* Dicky-Fuller Test: `r ro_coef`
+* Dicky-Fuller t-val: `r ro_tval`
+* Reject Non-Stationary: `r reject_non_stationarity`
+Confiremd Log gdp is not stationary
+
+## Part e
+
+
+``` {r linear_models}
+fact2num <- function(fact){
+  as.numeric(levels(fact))[fact]
+}
+growth_rate <- fact2num(data$GrowthRate[est_range])
+growth_rate_lag1 <- fact2num(data$GrowthRate[est_range-1])
+li1_lag1 <- data$li1[est_range-1]
+li1_lag2 <- data$li1[est_range-2]
+li2_lag1 <- data$li2[est_range-1]
+li2_lag2 <- data$li2[est_range-2]
+
+lm_logit1 <- lm(growth_rate~growth_rate_lag1+li1_lag1+li2_lag1)
+lm_logit2 <- lm(growth_rate~growth_rate_lag1+li1_lag1+li2_lag2)
+lm_logit3 <- lm(growth_rate~growth_rate_lag1+li1_lag2+li2_lag1)
+lm_logit4 <- lm(growth_rate~growth_rate_lag1+li1_lag2+li2_lag2)
+
+r2_logit1 <- summary(lm_logit1)$r.squared
+r2_logit2 <- summary(lm_logit2)$r.squared
+r2_logit3 <- summary(lm_logit3)$r.squared
+r2_logit4 <- summary(lm_logit4)$r.squared
+
+```
+
+$R^{2}$ values are:
+
+* Logit 1: [li1(-1), li2(-1)] `r r2_logit1`
+* Logit 2: [li1(-1), li2(-2)] `r r2_logit2`
+* Logit 3: [li1(-2), li2(-1)] `r r2_logit3`
+* Logit 4: [li1(-2), li2(-2)] `r r2_logit4`
+
+Coefficients for best model Logit 1 are
+```{r coef}
+summary(lm_logit1)$coef
+```
+
+
+## Part f
+Breusch-Godfrey test on first-order residuals
+
+```{r breusch-godfrey}
+BG <- bgtest(growth_rate~growth_rate_lag1+li1_lag1+li2_lag1, type="Chisq")
+#BG <- length(resid_logit2)*r2_resid
+crit_BC <- qchisq(prob, df = 1)
+BC_choice <- (BG$statistic < crit_BC)
+```
+
+
+Residuals look like white noise allowing characterization of BG test as chi-square distribution with # lags degrees of freedom.
+
+* BG value: `r BG$statistic`
+* Critical value: `r crit_BC`
+* Model Correctly Specified: `r BC_choice`
+
+## Part g
+``` {r predict}
+ind_gr_lag1 <- fact2num(data$GrowthRate[range-1])
+ind_l1_lag1 <- data$li1[range-1]
+ind_l2_lag1 <- data$li2[range-1]
+
+indicators <- data.frame("growth_rate_lag1" = ind_gr_lag1, "li1_lag1" = ind_l1_lag1, "li2_lag1" = ind_l2_lag1)
+predictions <- predict(lm_logit1, indicators)
+
+plot(data$T[range], fact2num(data$GrowthRate[range]), col="blue", main="Actual vs Predicted Growth Rates")
+points(data$T[range], predictions, col="red")
+
+legend(x="topright", c("Prediction","Actual"),col=c("red","blue"),pch=c(1, 1))
+
+MSE <- function(y1, y2){
+  sum((y1 - y2) ** 2)/length(y1)
+}
+
+mse <- MSE(fact2num(data$GrowthRate[range]), predictions)
+
+```
+Mean squared error of: `r mse`

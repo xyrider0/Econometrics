@@ -69,6 +69,7 @@
 \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -198,11 +199,313 @@ Chi-square distribution LR = \$ -2 (\log L(b\_\{0\}) -
 \end{Highlighting}
 \end{Shaded}
 
-For Joint Li1, Li2. Log Likelihood ratio: 37.17 Significant: TRUE
+For Joint Li1, Li2. Log Likelihood ratio: 37.17 Crit Val: 5.9914645
+Significant: TRUE
 
-For Li1. Log Likelihood ratio: 11.138 Significant: TRUE
+For Li1. Log Likelihood ratio: 11.138 Crit Val: 3.8414588 Significant:
+TRUE
 
-For Li2. Log Likelihood ratio: 30.686 Significant: TRUE
+For Li2. Log Likelihood ratio: 30.686 Crit Val: 3.8414588 Significant:
+TRUE
+
+\hypertarget{part-b}{%
+\subsection{Part b}\label{part-b}}
+
+We can use McFadden \(R^{2}\) to select the best lag structure because
+all the log likelihood ratios are significant. The McFadden \(R^{2}\)
+calculation is given by
+\(R^{2} = 1 - \cfrac{\log{L(b)}}{\log{L(b_{1})}}\) where \(b_{1}\) is
+the model with only an intercept. The largest Mcfadden \(R^{2}\) value
+should be chosen as the preferred logit model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calcMcfadden <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ll_test, ll_const)\{}
+  \DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{ll_test}\OperatorTok{/}\NormalTok{ll_const}
+\NormalTok{\}}
+
+\NormalTok{ll_logit1 <-}\StringTok{ }\FloatTok{-134.178}
+\NormalTok{ll_logit2 <-}\StringTok{ }\FloatTok{-134.126}
+\NormalTok{ll_logit3 <-}\StringTok{ }\FloatTok{-130.346}
+\NormalTok{ll_logit4 <-}\StringTok{ }\FloatTok{-130.461}
+\NormalTok{ll_const <-}\StringTok{ }\FloatTok{-152.763}
+
+\NormalTok{mc_r2_logit1 <-}\StringTok{ }\KeywordTok{calcMcfadden}\NormalTok{(ll_logit1, ll_const)}
+\NormalTok{mc_r2_logit2 <-}\StringTok{ }\KeywordTok{calcMcfadden}\NormalTok{(ll_logit2, ll_const)}
+\NormalTok{mc_r2_logit3 <-}\StringTok{ }\KeywordTok{calcMcfadden}\NormalTok{(ll_logit3, ll_const)}
+\NormalTok{mc_r2_logit4 <-}\StringTok{ }\KeywordTok{calcMcfadden}\NormalTok{(ll_logit4, ll_const)}
+\end{Highlighting}
+\end{Shaded}
+
+The Mcfadden \(R^{2}\) values are:
+
+\begin{itemize}
+\tightlist
+\item
+  Logit 1 {[}li1(-1), li2(-1){]}: 0.121659
+\item
+  Logit 2 {[}li1(-1), li2(-2){]}: 0.1219994
+\item
+  Logit 3 {[}li1(-2), li2(-1){]}: 0.1467436
+\item
+  Logit 4 {[}li1(-2), li2(-2){]}: 0.1459908
+\end{itemize}
+
+The best model is Logit 3 {[}li1(-2), li2(-1): with the highest McFadden
+\(R^{2}\) value of 0.1467436
+
+\hypertarget{part-c}{%
+\subsection{Part c}\label{part-c}}
+
+Logit Model 3: \(\beta_{c} = 0.746\) \(\beta_{li1(-2)} = -0.429\)
+\(\beta_{li2(-1)} = -0.131\)
+
+Pr{[}\(y_{i} = 1\){]} = \(\cfrac{exp(x_{i}'b)}{1 + exp(x_{i}'b)}\)
+Pr{[}\(y_{i} = 0\){]} = \(\cfrac{1}{1 + exp(x_{i}'b)}\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beta_c <-}\StringTok{ }\FloatTok{0.746}
+\NormalTok{beta_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\FloatTok{-0.429}
+\NormalTok{beta_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\FloatTok{-0.131}
+\NormalTok{cutoff <-}\StringTok{ }\FloatTok{0.5}
+\NormalTok{range <-}\StringTok{ }\DecValTok{245}\OperatorTok{:}\DecValTok{264}
+\NormalTok{x_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{li1[range]}
+\NormalTok{x_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{li2[range]}
+
+\NormalTok{Z <-}\StringTok{ }\KeywordTok{exp}\NormalTok{(beta_c }\OperatorTok{+}\StringTok{ }\NormalTok{beta_}\DecValTok{1} \OperatorTok{*}\StringTok{ }\NormalTok{x_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{beta_}\DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{x_}\DecValTok{2}\NormalTok{)}
+\NormalTok{logit_vals <-}\StringTok{ }\NormalTok{Z}\OperatorTok{/}\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{Z) }
+  
+\NormalTok{predic_num =}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(logit_vals }\OperatorTok{>}\StringTok{ }\NormalTok{cutoff)}
+
+\NormalTok{logit_eval <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{GDPIMPR[range]}
+\NormalTok{logit_num <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{levels}\NormalTok{(logit_eval))[logit_eval]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: NAs introduced by coercion
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{t0_p0 <-}\StringTok{ }\KeywordTok{sum}\NormalTok{((predic_num }\OperatorTok{==}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\NormalTok{logit_num }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{))}\OperatorTok{/}\StringTok{ }\KeywordTok{length}\NormalTok{(range)}
+\NormalTok{t0_p1 <-}\StringTok{ }\KeywordTok{sum}\NormalTok{((predic_num }\OperatorTok{==}\StringTok{ }\DecValTok{1} \OperatorTok{&}\StringTok{ }\NormalTok{logit_num }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{))}\OperatorTok{/}\StringTok{ }\KeywordTok{length}\NormalTok{(range)}
+\NormalTok{t1_p0 <-}\StringTok{ }\KeywordTok{sum}\NormalTok{((predic_num }\OperatorTok{==}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\NormalTok{logit_num }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{))}\OperatorTok{/}\StringTok{ }\KeywordTok{length}\NormalTok{(range)}
+\NormalTok{t1_p1 <-}\StringTok{ }\KeywordTok{sum}\NormalTok{((predic_num }\OperatorTok{==}\StringTok{ }\DecValTok{1} \OperatorTok{&}\StringTok{ }\NormalTok{logit_num }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{))}\OperatorTok{/}\StringTok{ }\KeywordTok{length}\NormalTok{(range)}
+\end{Highlighting}
+\end{Shaded}
+
+Cut-off value: 0.5
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+observed & \(\hat{y} = 0\) & \(\hat{y} = 1\) & sum\tabularnewline
+\midrule
+\endhead
+\(y = 0\) & 0.2 & 0.15 & 0.35\tabularnewline
+\(y = 1\) & 0.25 & 0.4 & 0.65\tabularnewline
+sum & 0.45 & 0.55 & 1\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+Hit rate: 0.2 + 0.4 = 0.6
+
+\hypertarget{part-d}{%
+\subsection{Part d}\label{part-d}}
+
+Augmented Dicky-Fuller test on LOG GDP. Includes constant, trend, and
+single lag.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{est_range <-}\StringTok{ }\DecValTok{4}\OperatorTok{:}\DecValTok{242}
+\NormalTok{log_gdp <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{LOGGDP[est_range]}
+\NormalTok{log_gdp_lag1 <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{LOGGDP[est_range}\DecValTok{-1}\NormalTok{]}
+\NormalTok{log_gdp_diff1 <-}\StringTok{ }\KeywordTok{diff}\NormalTok{(data}\OperatorTok{$}\NormalTok{LOGGDP)[est_range]}
+\NormalTok{trend <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{T[est_range]}
+
+\NormalTok{df_fit <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(log_gdp}\OperatorTok{~}\NormalTok{log_gdp_lag1}\OperatorTok{+}\NormalTok{log_gdp_diff1}\OperatorTok{+}\NormalTok{trend)}
+
+
+\NormalTok{crit_val_trend <-}\StringTok{ }\FloatTok{-3.5}
+
+\NormalTok{ro_coef <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(df_fit)}\OperatorTok{$}\NormalTok{coef[}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{]}
+\NormalTok{ro_tval <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(df_fit)}\OperatorTok{$}\NormalTok{coef[}\DecValTok{3}\NormalTok{, }\DecValTok{3}\NormalTok{]}
+
+\NormalTok{reject_non_stationarity <-}\StringTok{ }\NormalTok{ro_tval }\OperatorTok{<}\StringTok{ }\NormalTok{crit_val_trend}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Dicky-Fuller Test: 0.6286648
+\item
+  Dicky-Fuller t-val: 11.8248886
+\item
+  Reject Non-Stationary: FALSE Confiremd Log gdp is not stationary
+\end{itemize}
+
+\hypertarget{part-e}{%
+\subsection{Part e}\label{part-e}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fact2num <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(fact)\{}
+  \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{levels}\NormalTok{(fact))[fact]}
+\NormalTok{\}}
+\NormalTok{growth_rate <-}\StringTok{ }\KeywordTok{fact2num}\NormalTok{(data}\OperatorTok{$}\NormalTok{GrowthRate[est_range])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in fact2num(data$GrowthRate[est_range]): NAs introduced by coercion
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{growth_rate_lag1 <-}\StringTok{ }\KeywordTok{fact2num}\NormalTok{(data}\OperatorTok{$}\NormalTok{GrowthRate[est_range}\DecValTok{-1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in fact2num(data$GrowthRate[est_range - 1]): NAs introduced by
+## coercion
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{li1_lag1 <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{li1[est_range}\DecValTok{-1}\NormalTok{]}
+\NormalTok{li1_lag2 <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{li1[est_range}\DecValTok{-2}\NormalTok{]}
+\NormalTok{li2_lag1 <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{li2[est_range}\DecValTok{-1}\NormalTok{]}
+\NormalTok{li2_lag2 <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{li2[est_range}\DecValTok{-2}\NormalTok{]}
+
+\NormalTok{lm_logit1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(growth_rate}\OperatorTok{~}\NormalTok{growth_rate_lag1}\OperatorTok{+}\NormalTok{li1_lag1}\OperatorTok{+}\NormalTok{li2_lag1)}
+\NormalTok{lm_logit2 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(growth_rate}\OperatorTok{~}\NormalTok{growth_rate_lag1}\OperatorTok{+}\NormalTok{li1_lag1}\OperatorTok{+}\NormalTok{li2_lag2)}
+\NormalTok{lm_logit3 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(growth_rate}\OperatorTok{~}\NormalTok{growth_rate_lag1}\OperatorTok{+}\NormalTok{li1_lag2}\OperatorTok{+}\NormalTok{li2_lag1)}
+\NormalTok{lm_logit4 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(growth_rate}\OperatorTok{~}\NormalTok{growth_rate_lag1}\OperatorTok{+}\NormalTok{li1_lag2}\OperatorTok{+}\NormalTok{li2_lag2)}
+
+\NormalTok{r2_logit1 <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(lm_logit1)}\OperatorTok{$}\NormalTok{r.squared}
+\NormalTok{r2_logit2 <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(lm_logit2)}\OperatorTok{$}\NormalTok{r.squared}
+\NormalTok{r2_logit3 <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(lm_logit3)}\OperatorTok{$}\NormalTok{r.squared}
+\NormalTok{r2_logit4 <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(lm_logit4)}\OperatorTok{$}\NormalTok{r.squared}
+\end{Highlighting}
+\end{Shaded}
+
+\(R^{2}\) values are:
+
+\begin{itemize}
+\tightlist
+\item
+  Logit 1: {[}li1(-1), li2(-1){]} 0.5142939
+\item
+  Logit 2: {[}li1(-1), li2(-2){]} 0.5142321
+\item
+  Logit 3: {[}li1(-2), li2(-1){]} 0.4873591
+\item
+  Logit 4: {[}li1(-2), li2(-2){]} 0.4874944
+\end{itemize}
+
+Coefficients for best model Logit 1 are
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(lm_logit1)}\OperatorTok{$}\NormalTok{coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                       Estimate   Std. Error   t value     Pr(>|t|)
+## (Intercept)       0.0016338741 3.235051e-04  5.050536 8.841614e-07
+## growth_rate_lag1  0.4968932839 4.698275e-02 10.576080 1.233780e-21
+## li1_lag1         -0.0009850297 1.308068e-04 -7.530416 1.080186e-12
+## li2_lag1         -0.0001387017 6.491116e-05 -2.136793 3.364804e-02
+\end{verbatim}
+
+\hypertarget{part-f}{%
+\subsection{Part f}\label{part-f}}
+
+Breusch-Godfrey test on first-order residuals
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{BG <-}\StringTok{ }\KeywordTok{bgtest}\NormalTok{(growth_rate}\OperatorTok{~}\NormalTok{growth_rate_lag1}\OperatorTok{+}\NormalTok{li1_lag1}\OperatorTok{+}\NormalTok{li2_lag1, }\DataTypeTok{type=}\StringTok{"Chisq"}\NormalTok{)}
+\CommentTok{#BG <- length(resid_logit2)*r2_resid}
+\NormalTok{crit_BC <-}\StringTok{ }\KeywordTok{qchisq}\NormalTok{(prob, }\DataTypeTok{df =} \DecValTok{1}\NormalTok{)}
+\NormalTok{BC_choice <-}\StringTok{ }\NormalTok{(BG}\OperatorTok{$}\NormalTok{statistic }\OperatorTok{<}\StringTok{ }\NormalTok{crit_BC)}
+\end{Highlighting}
+\end{Shaded}
+
+Residuals look like white noise allowing characterization of BG test as
+chi-square distribution with \# lags degrees of freedom.
+
+\begin{itemize}
+\tightlist
+\item
+  BG value: 1.4268462
+\item
+  Critical value: 3.8414588
+\item
+  Model Correctly Specified: TRUE
+\end{itemize}
+
+\hypertarget{part-g}{%
+\subsection{Part g}\label{part-g}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ind_gr_lag1 <-}\StringTok{ }\KeywordTok{fact2num}\NormalTok{(data}\OperatorTok{$}\NormalTok{GrowthRate[range}\DecValTok{-1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in fact2num(data$GrowthRate[range - 1]): NAs introduced by coercion
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ind_l1_lag1 <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{li1[range}\DecValTok{-1}\NormalTok{]}
+\NormalTok{ind_l2_lag1 <-}\StringTok{ }\NormalTok{data}\OperatorTok{$}\NormalTok{li2[range}\DecValTok{-1}\NormalTok{]}
+
+\NormalTok{indicators <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\StringTok{"growth_rate_lag1"}\NormalTok{ =}\StringTok{ }\NormalTok{ind_gr_lag1, }\StringTok{"li1_lag1"}\NormalTok{ =}\StringTok{ }\NormalTok{ind_l1_lag1, }\StringTok{"li2_lag1"}\NormalTok{ =}\StringTok{ }\NormalTok{ind_l2_lag1)}
+\NormalTok{predictions <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(lm_logit1, indicators)}
+
+\KeywordTok{plot}\NormalTok{(data}\OperatorTok{$}\NormalTok{T[range], }\KeywordTok{fact2num}\NormalTok{(data}\OperatorTok{$}\NormalTok{GrowthRate[range]), }\DataTypeTok{col=}\StringTok{"blue"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Actual vs Predicted Growth Rates"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in fact2num(data$GrowthRate[range]): NAs introduced by coercion
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{points}\NormalTok{(data}\OperatorTok{$}\NormalTok{T[range], predictions, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}
+
+\KeywordTok{legend}\NormalTok{(}\DataTypeTok{x=}\StringTok{"topright"}\NormalTok{, }\KeywordTok{c}\NormalTok{(}\StringTok{"Prediction"}\NormalTok{,}\StringTok{"Actual"}\NormalTok{),}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{,}\StringTok{"blue"}\NormalTok{),}\DataTypeTok{pch=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Assignment7_files/figure-latex/predict-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{MSE <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(y1, y2)\{}
+  \KeywordTok{sum}\NormalTok{((y1 }\OperatorTok{-}\StringTok{ }\NormalTok{y2) }\OperatorTok{**}\StringTok{ }\DecValTok{2}\NormalTok{)}\OperatorTok{/}\KeywordTok{length}\NormalTok{(y1)}
+\NormalTok{\}}
+
+\NormalTok{mse <-}\StringTok{ }\KeywordTok{MSE}\NormalTok{(}\KeywordTok{fact2num}\NormalTok{(data}\OperatorTok{$}\NormalTok{GrowthRate[range]), predictions)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in fact2num(data$GrowthRate[range]): NAs introduced by coercion
+\end{verbatim}
+
+Mean squared error of: \ensuremath{1.0143247\times 10^{-5}}
 
 
 \end{document}
